@@ -1,0 +1,77 @@
+fullnameOverride: <deployment-name>
+
+replicaCount: 1
+containerPort: 4080
+image:
+  repository: <url-to-image-host>/<image-name>
+  tag: <image-tag> // our pipeline adds this based on a version generated from git commits
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: docker-cfg
+
+env:
+  - name: METEOR_DISABLE_OPTIMISTIC_CACHING
+    value: 1
+  - name: METEOR_WATCH_POLLING_INTERVAL_MS
+    value: 10000
+  - name: MONGO_OPLOG_URL
+    value: "<mongodb-connection-string-local-db>"
+  - name: MONGO_URL
+    value: "<mongodb-connection-string-store-db>"
+  - name: OAUTH2_ADMIN_URL
+    value: "http://<hydra-admin-service>.<namespace>:4445"
+  - name: OAUTH2_IDP_PUBLIC_CHANGE_PASSWORD_URL
+    value: "https://<storefront-url>/account/change-password?email=EMAIL&from=FROM"
+  - name: OAUTH2_PUBLIC_URL
+    value: "https://<storefront-url>/auth/"
+  - name: PORT
+    value: 4080
+  - name: PUBLIC_FILES_BASE_URL
+    value: "https://<storefront-url>/api"
+  - name: PUBLIC_GRAPHQL_API_URL_HTTP
+    value: "https://<storefront-url>/api/graphql"
+  - name: PUBLIC_GRAPHQL_API_URL_WS
+    value: "wss://<storefront-url>/api/graphql"
+  - name: PUBLIC_I18N_BASE_URL
+    value: "https://<storefront-url>/api"
+  - name: PUBLIC_STOREFRONT_HOME_URL
+    value: "https://<storefront-url>"
+  - name: ROOT_URL
+    value: "https://<admin-url>/"
+  - name: OAUTH2_CLIENT_ID
+    value: "reaction-admin"
+
+service:
+  type: ClusterIP
+  port: 4080
+  host: <admin-url>
+
+probes:
+  enabled: false
+  probePath: /
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  readinessProbe:
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: 50mb
+    nginx.ingress.kubernetes.io/client-max-body-size: 50m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: "<admin-url>"
+      path: "/"
+  tls:
+    - hosts:
+        - "<admin-url>"
+      secretName: "<admin-url-key>"

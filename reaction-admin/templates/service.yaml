@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "reaction-admin.fullname" . }}
+  labels:
+    app: {{ template "reaction-admin.name" . }}
+    chart: {{ template "reaction-admin.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.containerPort }}
+      protocol: TCP
+  selector:
+    app: {{ template "reaction-admin.name" . }}
+    release: {{ .Release.Name }}

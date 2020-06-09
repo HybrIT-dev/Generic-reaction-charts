@@ -1,0 +1,17 @@
+{{- $fullName := include "hydra.fullname" . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-token
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ $fullName }}-token
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5555
+      targetPort: 5555
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

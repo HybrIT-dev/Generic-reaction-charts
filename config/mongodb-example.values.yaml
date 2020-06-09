@@ -1,0 +1,5 @@
+fullnameOverride: <mongodb-podname>
+mongodbRootPassword: "<root-password>"
+replicaSet:
+  enabled: true
+  key: "<replicaset-auth-key>"

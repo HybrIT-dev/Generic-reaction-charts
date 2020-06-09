@@ -1,0 +1,5 @@
+fullnameOverride: <PostgreSQL-pod-name>
+postgresqlPostgresPassword: "<root-password>"
+postgresqlUsername: "<user>"
+postgresqlPassword: "<user-password>"
+postgresqlDatabase: "hydra"
