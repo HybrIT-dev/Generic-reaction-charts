@@ -1,6 +1,6 @@
-### MongoDB for cluster
+# MongoDB for cluster
 
-#### deploy the MongoDB chart to the cluster:
+## deploy the MongoDB chart to the cluster:
 we can take the Bitnami chart and make it available in the cluster then use it with a values file for customization
 ```shell script
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -8,7 +8,7 @@ helm upgrade --install --debug --wait -n <namespace> <deployment-name> bitnami/m
 ```
 this should deploy the mongodb to the cluster and run it
 
-#### Setting up the database user
+## Setting up the database user
 We want to create a custom user so that we don't have to use the root one. so we:
 
 connect to the Mongodb:

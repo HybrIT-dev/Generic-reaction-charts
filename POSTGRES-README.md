@@ -1,4 +1,4 @@
-### Deploying PostgresSQL to cluster
+# Deploying PostgresSQL to cluster
 
 make Bitnami charts available to cluster if they aren't already (also needed for mongodb)
 
@@ -13,14 +13,14 @@ helm upgrade --install --debug --wait -n <namespace> <full-name> bitnami/postgre
 The connection string for hydra will be the following:
 
 `postgres://<user>:<user-password>@<postgress-service>.<namespace>/hydra?sslmode=disable`
-#### add the client ids to hydra
+## add the client ids to hydra
 
 the hydra pod needs to be deployed/running for this
 get the pod names with 
 ```shell script
 kubectl get pods -n <namespace>
 ```
-##### storefront
+### storefront
 ```shell script
 kubectl exec -it <hydra-pod> -n <namespace> hydra -- clients create /
     --callbacks "https://<storefront-url>/callback" /
@@ -30,7 +30,7 @@ kubectl exec -it <hydra-pod> -n <namespace> hydra -- clients create /
     --config /etc/config/config.yaml /
     --endpoint http://<hydra-admin-service>.<namespace>:4445
 ```
-##### admin
+### admin
 ```shell script
 kubectl exec -it <hydra-pod> -n <namespace> hydra -- clients create /
     --callbacks "https://<admin-url>/authentication/callback","https://<admin-url>/authentication/silent_callback" /
